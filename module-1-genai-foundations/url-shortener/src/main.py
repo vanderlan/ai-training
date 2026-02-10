@@ -282,7 +282,6 @@ async def root():
                     // Show result
                     document.getElementById('shortUrl').value = data.short_url;
                     document.getElementById('stats').innerHTML = `
-                        <div><strong>Original:</strong> ${data.original_url}</div>
                         <div><strong>Code:</strong> ${data.short_code}</div>
                         <div><strong>Clicks:</strong> ${data.clicks}</div>
                     `;
