@@ -170,7 +170,51 @@ Document your learnings, challenges, and solutions here as you progress through 
 
 ## 🚢 Deployment
 
-### Deploy to Railway
+### Option 1: Deploy to Vercel (Serverless)
+
+**⚠️ Important:** Vercel uses serverless functions, so the SQLite database resets on each deployment. For production, consider using Railway or add a cloud database (PostgreSQL on Supabase/Neon).
+
+1. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Deploy**
+   ```bash
+   # From project directory
+   cd module-1-genai-foundations/url-shortener
+   
+   # Login to Vercel
+   vercel login
+   
+   # Deploy
+   vercel
+   ```
+
+3. **Follow the prompts:**
+   - Set up and deploy? **Y**
+   - Which scope? Choose your account
+   - Link to existing project? **N**
+   - Project name? **url-shortener** (or your choice)
+   - Directory? **./** (current directory)
+   - Override settings? **N**
+
+4. **Set Environment Variable (Optional)**
+   ```bash
+   vercel env add BASE_URL
+   # Enter your Vercel URL: https://your-app.vercel.app
+   ```
+
+5. **Redeploy with environment**
+   ```bash
+   vercel --prod
+   ```
+
+**Note:** Vercel deployments work but data resets between deployments. Perfect for demos!
+
+### Option 2: Deploy to Railway (Recommended for Production)
+
+Railway supports persistent databases and long-running servers.
 
 1. **Create Railway Account**
    - Sign up at [railway.app](https://railway.app)

@@ -3,10 +3,17 @@ from datetime import datetime
 from typing import Optional, List
 import random
 import string
+import os
 
 
 class Database:
-    def __init__(self, db_path: str = "urls.db"):
+    def __init__(self, db_path: str = None):
+        # For Vercel, use /tmp directory for SQLite
+        if db_path is None:
+            if os.getenv("VERCEL"):
+                db_path = "/tmp/urls.db"
+            else:
+                db_path = "urls.db"
         self.db_path = db_path
         self.init_db()
     
