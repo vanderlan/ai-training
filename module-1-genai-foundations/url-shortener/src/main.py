@@ -27,7 +27,7 @@ app.add_middleware(
 db = Database()
 
 # Get base URL from environment or use default
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+BASE_URL = os.getenv("BASE_URL", "https://url-shortener-vanderlan.vercel.app")
 
 
 @app.get("/", response_class=HTMLResponse)

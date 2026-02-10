@@ -89,9 +89,9 @@ python -m src.main
 ```
 
 The application will be available at:
-- **Web Interface:** http://localhost:8000
-- **API Docs:** http://localhost:8000/docs
-- **ReDoc:** http://localhost:8000/redoc
+- **Web Interface:** https://url-shortener-vanderlan.vercel.app
+- **API Docs:** https://url-shortener-vanderlan.vercel.app/docs
+- **ReDoc:** https://url-shortener-vanderlan.vercel.app/redoc
 
 ## 🧪 Testing
 
@@ -122,7 +122,7 @@ Content-Type: application/json
   "id": 1,
   "original_url": "https://example.com/very/long/url",
   "short_code": "mylink",
-  "short_url": "http://localhost:8000/mylink",
+  "short_url": "https://url-shortener-vanderlan.vercel.app/mylink",
   "clicks": 0,
   "created_at": "2026-02-10T10:30:00"
 }
@@ -321,4 +321,4 @@ Want to take this further? Try adding:
 
 ---
 
-**Part of Taller AI Training Program - Module 1** | [View Live Demo](#) | [API Docs](http://localhost:8000/docs)
+**Part of Taller AI Training Program - Module 1** | [View Live Demo](#) | [API Docs](https://url-shortener-vanderlan.vercel.app/docs)
