@@ -29,7 +29,6 @@ db = Database()
 # Get base URL from environment or use default
 BASE_URL = os.getenv("BASE_URL", "https://url-shortener-vanderlan.vercel.app")
 
-
 @app.get("/", response_class=HTMLResponse)
 async def root():
     """Serve the frontend HTML"""
@@ -62,7 +61,7 @@ async def root():
                 border-radius: 20px;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.3);
                 padding: 40px;
-                max-width: 600px;
+                max-width: 800px;
                 width: 100%;
             }
             

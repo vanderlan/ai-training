@@ -14,12 +14,6 @@ Build a URL shortening service that takes long URLs and creates short, memorable
 - [ ] Track click statistics
 - [ ] Basic validation and error handling
 
-### Optional Features
-- [ ] Custom aliases
-- [ ] Expiration dates
-- [ ] Analytics dashboard
-- [ ] QR code generation
-
 ## 🛠️ Tech Stack
 
 - **Backend:** Python 3.11 + FastAPI
@@ -170,9 +164,7 @@ Document your learnings, challenges, and solutions here as you progress through 
 
 ## 🚢 Deployment
 
-### Option 1: Deploy to Vercel (Serverless)
-
-**⚠️ Important:** Vercel uses serverless functions, so the SQLite database resets on each deployment. For production, consider using Railway or add a cloud database (PostgreSQL on Supabase/Neon).
+### Vercel (Serverless)
 
 1. **Install Vercel CLI**
    ```bash
@@ -210,41 +202,6 @@ Document your learnings, challenges, and solutions here as you progress through 
    vercel --prod
    ```
 
-**Note:** Vercel deployments work but data resets between deployments. Perfect for demos!
-
-### Option 2: Deploy to Railway (Recommended for Production)
-
-Railway supports persistent databases and long-running servers.
-
-1. **Create Railway Account**
-   - Sign up at [railway.app](https://railway.app)
-   - Connect your GitHub account
-
-2. **Deploy from GitHub**
-   ```bash
-   # Push your code to GitHub
-   git add .
-   git commit -m "Add URL shortener"
-   git push origin main
-   ```
-
-3. **Create New Project in Railway**
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select your repository
-   - Railway will auto-detect the Dockerfile
-
-4. **Configure Environment Variables**
-   - Add `BASE_URL` variable with your Railway URL
-   - Example: `https://your-app.up.railway.app`
-
-5. **Deploy!**
-   - Railway will build and deploy automatically
-   - Get your public URL from the dashboard
-
-### Alternative: Deploy to Vercel (Serverless)
-
-For serverless deployment, you'll need to adapt the code slightly. Railway is recommended for this project.
-
 ### Local Docker Deployment
 
 ```bash
@@ -268,20 +225,6 @@ docker run -p 8000:8000 url-shortener
 - [x] Docker support
 - [x] Production-ready deployment config
 
-## 🎯 Next Steps & Enhancements
-
-Want to take this further? Try adding:
-- [ ] Expiration dates for URLs
-- [ ] Analytics dashboard with charts
-- [ ] QR code generation
-- [ ] User authentication
-- [ ] Rate limiting
-- [ ] Custom domains
-- [ ] URL preview before redirect
-- [ ] Bulk URL shortening
-- [ ] API key authentication
-- [ ] PostgreSQL for production scale
-
 ## 📝 Notes
 
 ### What I Learned
@@ -303,22 +246,3 @@ Want to take this further? Try adding:
 - **Challenge:** Tracking clicks reliably
   - **Solution:** Increment counter in database during redirect
 
-## 🚢 Deployment
-
-- [ ] Choose deployment platform (Vercel, Railway, Render, etc.)
-- [ ] Configure environment variables
-- [ ] Deploy and test
-- [ ] Share your live URL!
-
-## 📚 Resources
-
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Pydantic Models](https://docs.pydantic.dev/)
-- [URL Shortening Algorithms](https://en.wikipedia.org/wiki/URL_shortening)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-- [Railway Deployment Guide](https://docs.railway.app/)
-- [SQLite Tutorial](https://www.sqlitetutorial.net/)
-
----
-
-**Part of Taller AI Training Program - Module 1** | [View Live Demo](#) | [API Docs](https://url-shortener-vanderlan.vercel.app/docs)
