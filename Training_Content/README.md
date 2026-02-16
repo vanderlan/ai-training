@@ -1,5 +1,5 @@
 # Agentic AI Intensive Training Program
-cscsc
+
 ## 1-Week Full-Time Training for Senior Contractors
 
 ```
