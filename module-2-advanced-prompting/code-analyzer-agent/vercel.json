@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/analyze/security",
+      "dest": "api/index.ts"
+    },
+    {
+      "src": "/api/analyze/performance",
+      "dest": "api/index.ts"
+    },
+    {
+      "src": "/api/analyze",
+      "dest": "api/index.ts"
+    },
+    {
+      "src": "/",
+      "dest": "public/index.html"
+    }
+  ]
+}

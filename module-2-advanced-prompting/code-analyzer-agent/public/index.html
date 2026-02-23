@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Analyzer Agent - Module 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+        
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .btn-security {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn-performance {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .summary {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .issues {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .issue {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .issue.critical {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .issue.high {
+            border-color: #fd7e14;
+            background: #fff8f3;
+        }
+        
+        .issue.medium {
+            border-color: #ffc107;
+            background: #fffbf0;
+        }
+        
+        .issue.low {
+            border-color: #28a745;
+            background: #f0fff4;
+        }
+        
+        .issue-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .metric {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fff5f5;
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Code Analyzer Agent</h1>
+            <p>AI-Powered Code Analysis with Advanced Prompting</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Module 2 - Advanced Prompting for Engineering</p>
+        </header>
+        
+        <div class="content">
+            <div class="input-section">
+                <label for="code">Enter your code:</label>
+                <textarea id="code" placeholder="Paste your code here..."></textarea>
+            </div>
+            
+            <div class="controls">
+                <div>
+                    <label for="language">Language:</label>
+                    <select id="language">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="java">Java</option>
+                        <option value="csharp">C#</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="analyzeCode('general')">
+                    📊 General Analysis
+                </button>
+                <button class="btn-security" onclick="analyzeCode('security')">
+                    🔒 Security Analysis
+                </button>
+                <button class="btn-performance" onclick="analyzeCode('performance')">
+                    ⚡ Performance Analysis
+                </button>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your code...</p>
+            </div>
+            
+            <div class="error" id="error"></div>
+            
+            <div class="results" id="results">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function analyzeCode(type) {
+            const code = document.getElementById('code').value;
+            const language = document.getElementById('language').value;
+            
+            if (!code.trim()) {
+                showError('Please enter some code to analyze');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('error').classList.remove('show');
+            
+            // Disable buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            try {
+                const endpoint = type === 'general' 
+                    ? '/api/analyze'
+                    : `/api/analyze/${type}`;
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code, language }),
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                displayResults(data.analysis, type);
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+        
+        function displayResults(analysis, type) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            let html = `
+                <div class="summary">
+                    <h3>📋 Summary</h3>
+                    <p>${analysis.summary}</p>
+                </div>
+            `;
+            
+            if (analysis.issues && analysis.issues.length > 0) {
+                html += `
+                    <div class="issues">
+                        <h3>🐛 Issues Found (${analysis.issues.length})</h3>
+                        ${analysis.issues.map((issue, index) => `
+                            <div class="issue ${issue.severity}">
+                                <div class="issue-header">${issue.severity} - ${issue.category}</div>
+                                <div><strong>Line:</strong> ${issue.line || 'N/A'}</div>
+                                <div><strong>Issue:</strong> ${issue.description}</div>
+                                <div><strong>Fix:</strong> ${issue.suggestion}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            if (analysis.suggestions && analysis.suggestions.length > 0) {
+                html += `
+                    <div class="issues">
+                        <h3>💡 Suggestions</h3>
+                        <ul>
+                            ${analysis.suggestions.map(s => `<li>${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (analysis.metrics) {
+                html += `
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${analysis.metrics.complexity || 'N/A'}</div>
+                            <div class="metric-label">Complexity</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${analysis.metrics.readability || 'N/A'}</div>
+                            <div class="metric-label">Readability</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${analysis.metrics.test_coverage_estimate || 'N/A'}</div>
+                            <div class="metric-label">Test Coverage</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultsContent.innerHTML = html;
+            document.getElementById('results').classList.add('show');
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = `Error: ${message}`;
+            errorDiv.classList.add('show');
+        }
+        
+        // Sample code for testing
+        document.getElementById('code').value = `def process_data(data):
+    result = []
+    for i in range(len(data)):
+        if data[i] > 0:
+            result.append(data[i] * 2)
+    return result
+
+def get_user(user_id):
+    import sqlite3
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    query = f"SELECT * FROM users WHERE id = {user_id}"
+    cursor.execute(query)
+    return cursor.fetchone()`;
+    </script>
+</body>
+</html>
