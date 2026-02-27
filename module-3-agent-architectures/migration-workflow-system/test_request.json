@@ -1,0 +1,7 @@
+{
+  "source_framework": "express",
+  "target_framework": "fastapi",
+  "files": {
+    "server.js": "const express = require('express');\nconst app = express();\n\napp.use(express.json());\n\napp.get('/api/users', async (req, res) => {\n    const users = [{id: 1, name: 'John'}];\n    res.json(users);\n});\n\napp.listen(3000, () => {\n    console.log('Server running on port 3000');\n});"
+  }
+}

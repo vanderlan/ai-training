@@ -1,103 +1,317 @@
 # Migration Workflow System
 
-**Module 3 Project: Agent Architectures**
+**Module 3: Agent Architectures**
 
-## 🎯 Project Overview
+An AI-powered multi-phase agent system for autonomous code migrations using OpenAI's GPT and LangGraph-style patterns.
 
-Build an autonomous agent system that manages complex migration workflows using the Observe → Think → Act pattern. This project explores agent architectures, memory systems, and multi-agent orchestration for handling code or data migrations.
+## 🎯 System Architecture
 
-## 📋 Requirements
-
-### Core Features
-- [ ] Implement agent loop (Observe → Think → Act)
-- [ ] Memory system for context persistence
-- [ ] Planning and task decomposition
-- [ ] Verification and validation steps
-- [ ] Progress tracking and reporting
-
-### Advanced Features
-- [ ] Multi-agent orchestration
-- [ ] Rollback capabilities
-- [ ] Human-in-the-loop approval
-- [ ] Parallel migration execution
-
-## 🛠️ Tech Stack
-
-Recommended:
-- **Language:** Python
-- **Agent Framework:** LangGraph, CrewAI, or custom
-- **Memory:** Vector DB (Pinecone, Weaviate) or local storage
-- **LLM:** OpenAI, Claude, or similar
-
-## 📁 Project Structure
+The system implements the **Observe → Think → Act** agent loop across 4 phases:
 
 ```
-migration-workflow-system/
-├── README.md
-├── src/
-│   ├── agents/
-│   │   ├── observer.py       # Observation agent
-│   │   ├── planner.py        # Planning agent
-│   │   └── executor.py       # Execution agent
-│   ├── memory/
-│   │   └── context_manager.py
-│   ├── workflows/
-│   │   └── migration_flow.py
-│   └── main.py
-├── tests/
-└── examples/
+┌──────────────────────────────────────────────────────────┐
+│           Migration Workflow Agent Loop                   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌─────────────┐                                        │
+│  │  OBSERVE    │  Read source code, understand context  │
+│  └──────┬──────┘                                        │
+│         │                                               │
+│         ▼                                               │
+│  ┌─────────────┐                                        │
+│  │   THINK     │  LLM analyzes and plans steps          │
+│  │  (LLM)      │                                        │
+│  └──────┬──────┘                                        │
+│         │                                               │
+│         ▼                                               │
+│  ┌─────────────┐                                        │
+│  │    ACT      │  Execute migration steps               │
+│  │ (Transform) │                                        │
+│  └──────┬──────┘                                        │
+│         │                                               │
+│         ▼                                               │
+│  ┌─────────────┐                                        │
+│  │   VERIFY    │  Validate results                      │
+│  └─────────────┘                                        │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
 ```
 
-## 🚀 Getting Started
+## 🏗️ Core Components
 
-1. **Setup Environment**
-   ```bash
-   # Add your setup instructions
-   ```
+### 1. **State Management** (`src/state.py`)
+- `MigrationState`: Tracks complete migration progress
+- `MigrationStep`: Individual tasks in the plan
+- `Phase`: ANALYSIS → PLANNING → EXECUTION → VERIFICATION → COMPLETE
 
-2. **Install Dependencies**
-   ```bash
-   # Add your installation commands
-   ```
+### 2. **LLM Client** (`src/llm_client.py`)
+- Communicates with OpenAI API
+- Parses structured outputs from LLM
+- Handles JSON response parsing
 
-3. **Run a Migration**
-   ```bash
-   # Add your run commands
-   ```
+### 3. **Agent Core** (`src/agent.py`)
+- Implements the 4-phase workflow
+- Orchestrates state transitions
+- Error handling and fallback mechanisms
+
+### 4. **System Prompts** (`src/prompts.py`)
+- Phase-specific guidance for the LLM
+- Structured output specifications
+- JSON schema definitions
+
+### 5. **FastAPI Server** (`src/main.py`)
+- REST endpoints for migrations
+- Health checks and status tracking
+- Example migration suggestions
+
+## 🚀 Quick Start
+
+### Setup
+
+```bash
+# Clone and navigate to project
+cd module-3-agent-architectures/migration-workflow-system
+
+# Create virtual environment
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Setup environment
+cp .env.example .env
+# Edit .env and add your OPENAI_API_KEY
+```
+
+### Run the Server
+
+```bash
+uvicorn src.main:app --reload
+```
+
+Then visit: http://localhost:8000/docs
+
+### Example API Call
+
+```bash
+curl -X POST http://localhost:8000/migrate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source_framework": "express",
+    "target_framework": "fastapi",
+    "files": {
+      "server.js": "const app = require(\"express\")(); app.get(\"/\", (req, res) => res.json({})); app.listen(3000);"
+    }
+  }'
+```
+
+## 📚 Phase Details
+
+### Phase 1: ANALYSIS 🔍
+**Goal**: Understand source code structure and patterns
+
+```python
+# Actions:
+# - Parse all source files
+# - Identify framework patterns
+# - Extract dependencies
+# - Note potential challenges
+
+# Output (MigrationState.analysis):
+{
+    "framework_patterns": [...],
+    "dependencies": [...],
+    "key_components": {...},
+    "potential_issues": [...],
+    "complexity_assessment": {...}
+}
+```
+
+### Phase 2: PLANNING 📋
+**Goal**: Create step-by-step migration plan
+
+```python
+# Actions:
+# - Break work into logical steps
+# - Identify dependencies between steps
+# - Order steps for efficiency
+# - Estimate complexity
+
+# Output (MigrationState.plan):
+[
+    {
+        "id": 1,
+        "description": "...",
+        "dependencies": [],
+        "estimated_complexity": "medium",
+        "input_files": [...],
+        "output_files": [...]
+    },
+    ...
+]
+```
+
+### Phase 3: EXECUTION ⚙️
+**Goal**: Transform code according to plan
+
+```python
+# For each step:
+# - Load input files
+# - Call LLM with step description
+# - Generate transformed code
+# - Store results
+
+# Output (MigrationState.migrated_files):
+{
+    "app.py": "# Migrated code...",
+    "models.py": "# Migrated code...",
+    ...
+}
+```
+
+### Phase 4: VERIFICATION ✅
+**Goal**: Validate migrated code quality
+
+```python
+# Actions:
+# - Check syntax correctness
+# - Verify API compatibility
+# - Assess functional equivalence
+# - Review code quality
+
+# Output (MigrationState.verification_result):
+{
+    "verification_status": "passed",
+    "checks": {...},
+    "issues": [...],
+    "recommendations": [...]
+}
+```
 
 ## 🧪 Testing
 
+Run unit tests:
+
 ```bash
-# Add your testing commands
+python tests.py
 ```
 
-## 📊 Learning Objectives
+Run example migrations:
 
-- Implement agent loop patterns
-- Design memory and context management systems
-- Build multi-agent coordination
-- Handle complex, multi-step workflows
-- Implement verification and validation strategies
+```bash
+# Express to FastAPI
+python cli.py express fastapi examples/express-server.js
 
-## 🎓 Key Concepts
+# Flask to FastAPI
+python cli.py flask fastapi examples/flask-app.py
+```
 
-- **Agent Loop:** Observe → Think → Act cycle
-- **ReAct Pattern:** Reasoning and Acting in synergy
-- **Planning:** Breaking down complex tasks
-- **Memory Systems:** Short-term and long-term context
-- **Multi-Agent Systems:** Coordinating specialized agents
+## 💻 CLI Usage
 
-## 📝 Architecture Decisions
+```bash
+# Single file migration
+python cli.py express fastapi server.js
 
-Document your design choices:
-- Agent responsibilities
-- Communication patterns
-- State management approach
-- Error handling strategy
+# Directory migration
+python cli.py express fastapi ./src
+
+# Save to specific output directory
+python cli.py express fastapi ./src --output ./migrated-app
+
+# Output as JSON
+python cli.py express fastapi ./src --json
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```bash
+# .env
+OPENAI_API_KEY=your-api-key-here
+MODEL=gpt-4-turbo
+PORT=8000
+```
+
+### Customization Points
+
+1. **Modify system prompts** in `src/prompts.py` to change agent behavior
+2. **Extend state** in `src/state.py` for new migration data
+3. **Add tools** by extending `LLMClient` methods
+4. **Add phases** by extending `MigrationAgent._step()` method
+
+## 📊 API Reference
+
+### POST /migrate
+Execute a complete migration workflow.
+
+**Request:**
+```json
+{
+    "source_framework": "express",
+    "target_framework": "fastapi",
+    "files": {
+        "filename.js": "file content"
+    }
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "source_framework": "express",
+    "target_framework": "fastapi",
+    "phase": "complete",
+    "plan_executed": [...],
+    "migrated_files": {...},
+    "verification": {...},
+    "errors": [],
+    "iterations": 4
+}
+```
+
+### GET /health
+Check API health status.
+
+### GET /examples
+Get example migrations.
+
+## 🎓 Learning Concepts
+
+### Agent Loop
+- **Observe**: Perception phase - gather input and context
+- **Think**: Reasoning phase - LLM decides next action
+- **Act**: Action phase - execute based on LLM decision
+- **Iterate**: Repeat until goal achieved
+
+### State Management
+- Persistent state across agent iterations
+- Phase-based progression tracking
+- Error handling and recovery strategies
+
+### Multi-Phase Architecture
+- Clear responsibilities per phase
+- Clean phase transitions
+- Error handling at each phase
+
+### LLM Integration
+- Structured prompts for consistent output
+- JSON parsing for tool compatibility
+- Context windowing for large migrations
 
 ## 🚢 Deployment
 
 - [ ] Configure agent settings
+- [ ] Set up Docker container
+- [ ] Deploy to Railway or Vercel
+- [ ] Configure environment variables
+- [ ] Test in production
 - [ ] Set up memory storage
 - [ ] Test with sample migrations
 - [ ] Document usage and patterns
