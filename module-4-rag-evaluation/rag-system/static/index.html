@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Code Search</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 RAG Code Search</h1>
+            <div class="status">
+                <span id="provider-badge" class="badge">Loading...</span>
+                <span id="chunks-badge" class="badge">0 chunks</span>
+            </div>
+        </header>
+
+        <section class="index-section">
+            <h2>Index GitHub Repository</h2>
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="github-url" 
+                    placeholder="https://github.com/owner/repo"
+                    value="https://github.com/vanderlan/Orion-Api"
+                />
+                <input
+                    type="text"
+                    id="github-branch"
+                    class="branch-input"
+                    placeholder="branch (optional)"
+                />
+                <button onclick="indexGithubRepo()" class="btn-primary">Index</button>
+                <button onclick="clearIndex()" class="btn-secondary">Clear</button>
+            </div>
+            <p class="help-text">Paste a public GitHub repository URL, index it, then ask questions below.</p>
+            <div id="index-status" class="status-message"></div>
+        </section>
+
+        <section class="query-section">
+            <h2>Ask Questions</h2>
+            <div class="input-group">
+                <textarea 
+                    id="query-input" 
+                    placeholder="Ask about your code... (e.g., 'How does authentication work?')"
+                    rows="2"
+                ></textarea>
+                <button onclick="query()" class="btn-primary">Search</button>
+            </div>
+            <div id="query-loading" class="loading hidden">Searching...</div>
+            <div id="query-result" class="result-container"></div>
+        </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

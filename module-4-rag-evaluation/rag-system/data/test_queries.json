@@ -1,0 +1,42 @@
+[
+  {
+    "question": "How do I load data from a file?",
+    "expected_answer": "Use the DataProcessor class's load_data method, passing in the filename as a parameter. The method returns a dictionary containing the loaded data and caches it for future use.",
+    "relevant_files": ["data_processor.py"]
+  },
+  {
+    "question": "What transformations are available for data processing?",
+    "expected_answer": "The DataProcessor supports 'normalize' and 'filter' transformations through the transform_data method. Pass the transformation type as the second parameter.",
+    "relevant_files": ["data_processor.py"]
+  },
+  {
+    "question": "How do I make a POST request to an API?",
+    "expected_answer": "Use the APIHandler class's post method. Pass the endpoint path and data dictionary. The method returns a response dictionary with status and ID.",
+    "relevant_files": ["api_handler.py"]
+  },
+  {
+    "question": "How can I create a new user?",
+    "expected_answer": "Use the UserService's createUser method with email, name, and optional role parameters. It returns a Promise with the created User object.",
+    "relevant_files": ["user_service.ts"]
+  },
+  {
+    "question": "How do I find all admin users?",
+    "expected_answer": "Use the UserService's findByRole method with 'admin' as the role parameter. It returns a Promise with an array of User objects.",
+    "relevant_files": ["user_service.ts"]
+  },
+  {
+    "question": "How can I validate an email address?",
+    "expected_answer": "Use the validateEmail function which takes an email string and returns a boolean. It uses a regex pattern to validate the email format.",
+    "relevant_files": ["user_service.ts"]
+  },
+  {
+    "question": "How do I handle API errors?",
+    "expected_answer": "Use the APIHandler's handle_error method, passing the exception. It returns an error response dictionary with status, message, and retry information.",
+    "relevant_files": ["api_handler.py"]
+  },
+  {
+    "question": "How can I process items in batches?",
+    "expected_answer": "Use the process_batch async function. Pass a list of items and optional batch_size parameter. It processes items in batches and returns the results.",
+    "relevant_files": ["data_processor.py"]
+  }
+]

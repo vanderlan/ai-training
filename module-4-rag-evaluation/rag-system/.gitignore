@@ -1,0 +1,10 @@
+# RAG System
+
+chroma_db/
+*.pyc
+__pycache__/
+.env
+.venv/
+venv/
+*.log
+.DS_Store
