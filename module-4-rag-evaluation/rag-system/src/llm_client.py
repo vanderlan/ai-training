@@ -16,7 +16,8 @@ class AnthropicClient(LLMClient):
 
     def __init__(self, model: str = "claude-3-5-sonnet-20241022"):
         import anthropic
-        self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        api_key = (os.getenv("ANTHROPIC_API_KEY") or "").strip()
+        self.client = anthropic.Anthropic(api_key=api_key or None)
         self.model = model
 
     def chat(self, messages: List[Dict[str, str]]) -> str:
@@ -44,7 +45,8 @@ class OpenAIClient(LLMClient):
 
     def __init__(self, model: str = None):
         from openai import OpenAI
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        api_key = (os.getenv("OPENAI_API_KEY") or "").strip()
+        self.client = OpenAI(api_key=api_key or None)
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
     def chat(self, messages: List[Dict[str, str]]) -> str:
@@ -62,8 +64,9 @@ class DeepSeekClient(LLMClient):
 
     def __init__(self, model: str = None):
         from openai import OpenAI
+        api_key = (os.getenv("DEEPSEEK_API_KEY") or "").strip()
         self.client = OpenAI(
-            api_key=os.getenv("DEEPSEEK_API_KEY"),
+            api_key=api_key or None,
             base_url="https://api.deepseek.com/v1",
         )
         self.model = model or os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
@@ -83,7 +86,8 @@ class GeminiClient(LLMClient):
 
     def __init__(self, model: str = "gemini-pro"):
         import google.generativeai as genai
-        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        api_key = (os.getenv("GOOGLE_API_KEY") or "").strip()
+        genai.configure(api_key=api_key or None)
         self.model = genai.GenerativeModel(model)
 
     def chat(self, messages: List[Dict[str, str]]) -> str:
@@ -118,6 +122,8 @@ class MockClient(LLMClient):
 
 def get_llm_client(provider: str = "anthropic") -> LLMClient:
     """Get LLM client based on provider."""
+    provider = (provider or "anthropic").strip().lower()
+
     providers = {
         "anthropic": AnthropicClient,
         "openai": OpenAIClient,

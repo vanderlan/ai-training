@@ -28,9 +28,10 @@ A complete Retrieval-Augmented Generation (RAG) system with comprehensive evalua
 - **Language:** Python 3.11+
 - **Vector DB:** ChromaDB with persistence
 - **Embeddings:** OpenAI text-embedding-3-small (with sentence-transformers fallback)
-- **LLM:** Anthropic Claude / OpenAI GPT-4 / Google Gemini
+- **LLM:** DeepSeek / Anthropic Claude / OpenAI GPT / Google Gemini
 - **Framework:** FastAPI
-- **Deployment:** Docker, Railway, Vercel ready
+- **Deployment:** Docker, Railway, Vercel
+- **Live URL:** https://rag-system-vanderlan-lab4.vercel.app
 
 ## 📁 Project Structure
 
@@ -98,10 +99,12 @@ If that fails on Windows, use Python 3.11 or install Microsoft C++ Build Tools.
 # Copy example env file
 cp .env.example .env
 
-# Edit .env and add your API keys:
-# - ANTHROPIC_API_KEY (for Claude)
-# - OPENAI_API_KEY (for embeddings)
-# - Or use sentence-transformers (free, no API key needed)
+# Edit .env — set LLM_PROVIDER to one of: deepseek, anthropic, openai, gemini
+# Then add the matching API key:
+# DEEPSEEK_API_KEY   — for DeepSeek (default provider)
+# ANTHROPIC_API_KEY  — for Claude
+# OPENAI_API_KEY     — for GPT (also used for embeddings)
+# GOOGLE_API_KEY     — for Gemini
 ```
 
 ### 4. Run Test Suite
@@ -125,7 +128,7 @@ Visit http://localhost:8000/docs for interactive API documentation.
 
 ## 🧪 Using the API
 
-### Index Files
+### Index a local directory
 
 ```bash
 curl -X POST "http://localhost:8000/index/directory" \
@@ -133,7 +136,15 @@ curl -X POST "http://localhost:8000/index/directory" \
   -d '{"directory": "./data/sample_code"}'
 ```
 
-### Query the Codebase
+### Index a public GitHub repository
+
+```bash
+curl -X POST "http://localhost:8000/index/github" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://github.com/owner/repo"}'
+```
+
+### Query the codebase
 
 ```bash
 curl -X POST "http://localhost:8000/query" \
@@ -141,7 +152,7 @@ curl -X POST "http://localhost:8000/query" \
   -d '{"question": "How do I create a new user?", "n_results": 5}'
 ```
 
-### Run Evaluation
+### Run evaluation
 
 ```bash
 curl -X POST "http://localhost:8000/evaluate" \
@@ -149,10 +160,11 @@ curl -X POST "http://localhost:8000/evaluate" \
   -d @data/test_queries.json
 ```
 
-### Get Index Statistics
+### Statistics and housekeeping
 
 ```bash
-curl "http://localhost:8000/stats"
+curl http://localhost:8000/stats
+curl -X DELETE http://localhost:8000/index
 ```
 
 ## 📊 Evaluation Metrics
@@ -210,12 +222,11 @@ Generation Metrics:
 
 ## 🚀 Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment instructions to:
-- Railway (recommended)
-- Vercel
-- Docker
+See [DEPLOYMENT.md](DEPLOYMENT.md) for full deployment instructions.
 
-## 📚 Learning Objectives Achieved
+**Live production URL:** https://rag-system-vanderlan-lab4.vercel.app
+
+## 🎓 Learning Objectives Achieved
 
 ✅ Implement complete RAG pipeline  
 ✅ Design effective chunking strategies for code  
@@ -223,47 +234,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment instructions to:
 ✅ Build comprehensive evaluation frameworks  
 ✅ Use LLM-as-judge patterns  
 ✅ Create production-ready REST API  
-
-## 🔧 Next Steps
-
-- Add more code languages (Java, Go, Rust)
-- Implement hybrid search (semantic + keyword)
-- Add caching layer for improved performance
-- Create frontend dashboard for visualization
-- Implement A/B testing for prompt variations
-- Implement observability and debugging
-
-## 🎓 Key Concepts
-
-- **Embeddings:** Vector representations of text
-- **Chunking:** Breaking documents into optimal segments
-- **Semantic Search:** Finding relevant context
-- **Context Window:** Managing LLM input limits
-- **Evaluation Metrics:** Measuring RAG quality
-- **LLM-as-Judge:** Using LLMs to evaluate responses
-
-## 📝 Chunking Strategies
-
-Document your chunking experiments:
-- Fixed-size chunks
-- Semantic chunks
-- Recursive splitting
-- Overlap strategies
-
-## 🚢 Deployment
-
-- [ ] Optimize vector database
-- [ ] Implement caching layer
-- [ ] Add monitoring and logging
-- [ ] Create API endpoint
-- [ ] Deploy and document
-
-## 📚 Resources
-
-- [RAG Best Practices](https://www.pinecone.io/learn/retrieval-augmented-generation/)
-- [Vector Database Comparison](https://www.benchmark.com)
-- [LangChain RAG](https://python.langchain.com/docs/use_cases/question_answering/)
-- Add more resources as needed
 
 ---
 

@@ -25,9 +25,12 @@ Railway provides easy deployment with automatic builds.
 
 4. **Add Environment Variables**
    ```bash
-   railway variables set ANTHROPIC_API_KEY=your_key_here
-   railway variables set OPENAI_API_KEY=your_key_here
-   railway variables set LLM_PROVIDER=anthropic
+   # Set your chosen provider (deepseek, anthropic, openai, or gemini)
+   railway variables set LLM_PROVIDER=deepseek
+   railway variables set DEEPSEEK_API_KEY=your_key_here
+   # or for other providers:
+   # railway variables set ANTHROPIC_API_KEY=your_key_here
+   # railway variables set OPENAI_API_KEY=your_key_here
    ```
 
 5. **Deploy**
@@ -54,9 +57,8 @@ docker build -t rag-system .
 
 ```bash
 docker run -p 8000:8000 \
-  -e ANTHROPIC_API_KEY=your_key \
-  -e OPENAI_API_KEY=your_key \
-  -e LLM_PROVIDER=anthropic \
+  -e LLM_PROVIDER=deepseek \
+  -e DEEPSEEK_API_KEY=your_key \
   rag-system
 ```
 
@@ -70,9 +72,10 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-deepseek}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - LLM_PROVIDER=anthropic
     volumes:
       - ./chroma_db:/app/chroma_db
 ```
@@ -93,22 +96,46 @@ Vercel supports Python serverless functions.
    npm install -g vercel
    ```
 
-2. **Deploy**
+2. **Login and deploy from this project folder**
    ```bash
+   cd module-4-rag-evaluation/rag-system
+   vercel login
    vercel
    ```
 
+   Recommended answers:
+   - Set up and deploy? **Y**
+   - Link to existing project? **N** (or **Y** if reusing one)
+   - Project name: **rag-system** (or your preferred name)
+   - In which directory is your code located? **./**
+   - Want to modify settings? **N**
+
 3. **Set Environment Variables**
    ```bash
-   vercel env add ANTHROPIC_API_KEY
-   vercel env add OPENAI_API_KEY
-   vercel env add LLM_PROVIDER
+   vercel env add LLM_PROVIDER        # e.g. deepseek
+   vercel env add DEEPSEEK_API_KEY    # if using DeepSeek
+   vercel env add ANTHROPIC_API_KEY   # if using Anthropic
+   vercel env add OPENAI_API_KEY      # if using OpenAI
    ```
+
+   **Production is currently configured with DeepSeek.**  
+   Live URL: https://rag-system-vanderlan-lab4.vercel.app
+
+4. **Deploy to production**
+   ```bash
+   vercel --prod
+   ```
+
+5. **Optional: Dashboard setup (Import from GitHub)**
+   - Framework Preset: **Other**
+   - Root Directory: **module-4-rag-evaluation/rag-system**
+   - Build Command: leave empty
+   - Output Directory: leave empty
 
 **Note:** Vercel has limitations:
 - 50MB deployment size limit
 - 10s execution timeout for serverless functions
-- ChromaDB persistence may require external storage
+- Index storage is ephemeral per deployment/instance
 
 ### Option 4: AWS EC2
 
@@ -140,9 +167,9 @@ For full control and persistent storage.
 
 5. **Set Environment Variables**
    ```bash
-   export ANTHROPIC_API_KEY=your_key
-   export OPENAI_API_KEY=your_key
-   export LLM_PROVIDER=anthropic
+   export LLM_PROVIDER=deepseek
+   export DEEPSEEK_API_KEY=your_key
+   # or: export ANTHROPIC_API_KEY / OPENAI_API_KEY for other providers
    ```
 
 6. **Run with Systemd**
@@ -156,9 +183,8 @@ For full control and persistent storage.
    [Service]
    User=ubuntu
    WorkingDirectory=/home/ubuntu/rag-system
-   Environment="ANTHROPIC_API_KEY=your_key"
-   Environment="OPENAI_API_KEY=your_key"
-   Environment="LLM_PROVIDER=anthropic"
+   Environment="LLM_PROVIDER=deepseek"
+   Environment="DEEPSEEK_API_KEY=your_key"
    ExecStart=/home/ubuntu/rag-system/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
    Restart=always
 
@@ -237,7 +263,9 @@ jobs:
 
 ## 💾 Data Persistence
 
-ChromaDB data is stored in `./chroma_db/` directory.
+Local and Docker runs store index data in `./chroma_db/`.
+
+On Vercel, the app uses `/tmp/chroma_db` because serverless functions require a writable temp directory. This storage is ephemeral and not shared across cold starts.
 
 For production:
 - Mount persistent volume in Docker
@@ -248,15 +276,20 @@ For production:
 
 ```bash
 # Health check
-curl https://your-domain.com/health
+curl https://rag-system-vanderlan-lab4.vercel.app/health
 
-# Index test files
-curl -X POST https://your-domain.com/index/files \
+# Index files
+curl -X POST https://rag-system-vanderlan-lab4.vercel.app/index/files \
   -H "Content-Type: application/json" \
-  -d '{"files": {"test.py": "def hello():\n    print(\"Hello\")"}}'
+  -d '{"files": {"test.py": "def hello():\n    return \"hi\""}}'
 
-# Test query
-curl -X POST https://your-domain.com/query \
+# Index a GitHub repository
+curl -X POST https://rag-system-vanderlan-lab4.vercel.app/index/github \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://github.com/owner/repo"}'
+
+# Query
+curl -X POST https://rag-system-vanderlan-lab4.vercel.app/query \
   -H "Content-Type: application/json" \
   -d '{"question": "What does the hello function do?"}'
 ```

@@ -156,10 +156,20 @@ def _download_github_archive(owner: str, repo: str, preferred_branch: Optional[s
     raise ValueError(f"Could not download repository archive. Last error: {last_error}")
 
 
+def _resolve_persist_directory() -> str:
+    """Resolve a writable persistence directory across environments."""
+    if os.getenv("VERCEL"):
+        return "/tmp/chroma_db"
+
+    return os.getenv("RAG_PERSIST_DIRECTORY", "./chroma_db")
+
+
 # Initialize RAG
-provider = os.getenv("LLM_PROVIDER", "anthropic")
+provider = os.getenv("LLM_PROVIDER", "anthropic").strip().lower()
 llm = get_llm_client(provider)
-rag = CodebaseRAG(llm)
+persist_directory = _resolve_persist_directory()
+os.makedirs(persist_directory, exist_ok=True)
+rag = CodebaseRAG(llm, persist_directory=persist_directory)
 
 
 @app.get("/")

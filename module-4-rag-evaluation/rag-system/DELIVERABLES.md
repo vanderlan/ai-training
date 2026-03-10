@@ -56,7 +56,7 @@ A production-ready RAG (Retrieval-Augmented Generation) system for codebase Q&A 
   - Context building from retrieved chunks
   - System and user prompt templates
   - Source citation with line numbers
-  - Multi-LLM support (Claude, GPT-4, Gemini)
+  - Multi-LLM support (DeepSeek, Claude, GPT, Gemini)
 
 ## 📊 Evaluation Features Completed
 
@@ -87,8 +87,9 @@ A production-ready RAG (Retrieval-Augmented Generation) system for codebase Q&A 
 - **Implemented:** FastAPI application
 - **Location:** [main.py](main.py)
 - **Endpoints:**
-  - `POST /index/directory` - Index code directory
-  - `POST /index/files` - Index files from request
+  - `POST /index/directory` - Index local code directory
+  - `POST /index/github` - Download and index a public GitHub repo
+  - `POST /index/files` - Index files from request body
   - `POST /query` - Query codebase
   - `POST /evaluate` - Run evaluation suite
   - `GET /stats` - Get index statistics
@@ -129,6 +130,7 @@ A production-ready RAG (Retrieval-Augmented Generation) system for codebase Q&A 
 ### Platform Configurations ✅
 - **Railway:** [railway.json](railway.json)
 - **Vercel:** [vercel.json](vercel.json)
+- **Live URL:** https://rag-system-vanderlan-lab4.vercel.app
 
 ### Documentation ✅
 - **Files:**
@@ -230,11 +232,12 @@ src/
 ## 🎯 Bonus Features
 
 1. **Multi-Language Support:** Python, JavaScript, TypeScript
-2. **Multi-LLM Support:** Anthropic, OpenAI, Gemini
-3. **Free Tier Option:** sentence-transformers for embeddings
-4. **Interactive Docs:** FastAPI auto-generated at `/docs`
-5. **Docker Support:** Full containerization
-6. **Multiple Deployment Options:** Railway, Vercel, Docker, AWS
+2. **Multi-LLM Support:** DeepSeek, Anthropic, OpenAI, Gemini
+3. **GitHub Indexing:** Index any public repository by URL
+4. **Free Tier Option:** sentence-transformers for embeddings
+5. **Interactive Docs:** FastAPI auto-generated at `/docs`
+6. **Docker Support:** Full containerization
+7. **Multiple Deployment Options:** Railway, Vercel, Docker
 
 ## 📝 Files Delivered
 
@@ -254,30 +257,30 @@ src/
 - `data/sample_code/user_service.ts` - Sample TypeScript
 - `data/test_queries.json` - Evaluation data
 
-### Configuration (7 files)
+### Configuration (9 files)
 - `requirements.txt` - Dependencies
 - `.env.example` - Environment template
 - `.gitignore` - Git configuration
+- `.vercelignore` - Vercel deploy excludes
 - `Dockerfile` - Container definition
 - `railway.json` - Railway config
 - `vercel.json` - Vercel config
+- `api/index.py` - Vercel serverless entrypoint
 
 ### Documentation (3 files)
 - `README.md` - Project documentation
 - `DEPLOYMENT.md` - Deployment guide
 - `DELIVERABLES.md` - This file
 
-**Total:** 22 files delivered
-
 ## ✨ Summary
 
 This project delivers a **complete, production-ready RAG system** with:
-- Intelligent code chunking
-- Vector-based semantic search
-- LLM-powered answer generation
-- Comprehensive evaluation metrics
-- REST API interface
-- Deployment configurations
-- Full documentation
+- Intelligent code chunking (Python, JavaScript/TypeScript, generic)
+- GitHub repository indexing by URL
+- Vector-based semantic search (ChromaDB + fallback backend)
+- LLM-powered answer generation (DeepSeek, Anthropic, OpenAI, Gemini)
+- Comprehensive evaluation metrics (Precision@K, Recall@K, MRR, LLM-as-Judge)
+- REST API interface with FastAPI
+- Deployed on Vercel: https://rag-system-vanderlan-lab4.vercel.app
 
 All core requirements and evaluation features have been successfully implemented and tested.
