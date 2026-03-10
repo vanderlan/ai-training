@@ -3,6 +3,7 @@ from .vector_store import CodebaseVectorStore
 from .chunker import CodeChunker, CodeChunk
 from .pipeline import CodebaseRAG
 from .evaluation import RAGEvaluator, EvalExample, create_eval_dataset
+from .observability import RAGLogger, rag_logger
 
 __all__ = [
     'CodebaseVectorStore',
@@ -11,5 +12,7 @@ __all__ = [
     'CodebaseRAG',
     'RAGEvaluator',
     'EvalExample',
-    'create_eval_dataset'
+    'create_eval_dataset',
+    'RAGLogger',
+    'rag_logger',
 ]

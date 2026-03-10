@@ -2,6 +2,7 @@
 from typing import List, Dict, Any, Optional
 from .vector_store import CodebaseVectorStore
 from .chunker import CodeChunker
+from .observability import rag_logger
 import os
 
 
@@ -122,13 +123,17 @@ class CodebaseRAG:
         filter_language: Optional[str] = None
     ) -> Dict[str, Any]:
         """Query the codebase and generate an answer."""
+        ctx = rag_logger.start_request(question)
+
         # Build filter
         where = {"language": filter_language} if filter_language else None
 
         # Retrieve relevant chunks
-        results = self.vector_store.query(question, n_results, where)
+        with rag_logger.span("retrieval", n_results=n_results):
+            results = self.vector_store.query(question, n_results, where)
 
         if not results:
+            rag_logger.finish_request(n_sources=0)
             return {
                 "answer": "No relevant code found for this question.",
                 "sources": [],
@@ -141,23 +146,27 @@ class CodebaseRAG:
         # Generate answer
         prompt = RAG_USER_PROMPT.format(context=context, question=question)
 
-        response = self.llm.chat([
-            {"role": "system", "content": RAG_SYSTEM_PROMPT},
-            {"role": "user", "content": prompt}
-        ])
+        with rag_logger.span("generation", model=getattr(self.llm, "model", "unknown")):
+            response = self.llm.chat([
+                {"role": "system", "content": RAG_SYSTEM_PROMPT},
+                {"role": "user", "content": prompt}
+            ])
+
+        sources = [
+            {
+                "file": r['metadata']['filename'],
+                "type": r['metadata'].get('type'),
+                "name": r['metadata'].get('name'),
+                "line": r['metadata'].get('line_start'),
+                "relevance": round(1 - r['distance'], 3)
+            }
+            for r in results
+        ]
+        rag_logger.finish_request(n_sources=len(sources))
 
         return {
             "answer": response,
-            "sources": [
-                {
-                    "file": r['metadata']['filename'],
-                    "type": r['metadata'].get('type'),
-                    "name": r['metadata'].get('name'),
-                    "line": r['metadata'].get('line_start'),
-                    "relevance": round(1 - r['distance'], 3)
-                }
-                for r in results
-            ],
+            "sources": sources,
             "context_used": context
         }
 

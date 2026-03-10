@@ -137,11 +137,23 @@ A production-ready RAG (Retrieval-Augmented Generation) system for codebase Q&A 
   - [README.md](README.md) - Complete project documentation
   - [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment guides
   - [.env.example](.env.example) - Environment template
+  - [src/observability.py](src/observability.py) - Structured logging module
+  - [api/index.py](api/index.py) - Vercel serverless entrypoint
+  - [.vercelignore](.vercelignore) - Vercel deploy exclusions
 
 ## 📈 Key Metrics & Achievements
 
+### Observability ✅
+- **Implemented:** Structured JSON logging for every RAG request
+- **Location:** [src/observability.py](src/observability.py)
+- **Features:**
+  - Request context with unique ID and timestamps
+  - Per-stage span timing (retrieval, generation)
+  - Structured JSON log events (`request_start`, `request_finish`)
+  - Module-level singleton `rag_logger` used by the pipeline
+
 ### Code Quality
-- **Modularity:** Clean separation of concerns across 5 modules
+- **Modularity:** Clean separation of concerns across 6 modules
 - **Type Safety:** Pydantic models for API validation
 - **Error Handling:** Comprehensive exception handling
 - **Documentation:** Docstrings for all classes and functions
@@ -162,7 +174,8 @@ A production-ready RAG (Retrieval-Augmented Generation) system for codebase Q&A 
 2. ✅ **Chunking Strategies:** Language-specific intelligent splitting
 3. ✅ **Vector Search:** Semantic similarity with embeddings
 4. ✅ **Evaluation Framework:** Comprehensive metrics and LLM-as-judge
-5. ✅ **Production Readiness:** API, containerization, deployment configs
+5. ✅ **Observability:** Structured logging with request tracing and stage timing
+6. ✅ **Production Readiness:** API, containerization, deployment configs
 
 ## 🔄 API Usage Examples
 
