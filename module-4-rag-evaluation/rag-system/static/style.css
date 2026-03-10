@@ -6,8 +6,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: #0d0d0d;
-    color: #e0e0e0;
+    color: #333;
     min-height: 100vh;
     padding: 20px;
 }
@@ -15,26 +14,26 @@ body {
 .container {
     max-width: 960px;
     margin: 0 auto;
-    background: #1a1a1a;
+    background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
     padding: 30px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #e0e0e0;
 }
 
 header {
     margin-bottom: 30px;
-    border-bottom: 2px solid #c0392b;
+    border-bottom: 2px solid #667eea;
     padding-bottom: 20px;
 }
 
 h1 {
-    color: #e74c3c;
+    color: #667eea;
     margin-bottom: 10px;
 }
 
 h2 {
-    color: #ccc;
+    color: #555;
     font-size: 1.3em;
     margin-bottom: 15px;
 }
@@ -50,14 +49,14 @@ h2 {
     border-radius: 20px;
     font-size: 0.85em;
     font-weight: 500;
-    background: #333;
-    color: #aaa;
+    background: #e8eaf6;
+    color: #5c6bc0;
 }
 
-.badge.provider-deepseek { background: #2e7d32; color: #e0e0e0; }
-.badge.provider-openai { background: #10a37f; color: #e0e0e0; }
-.badge.provider-anthropic { background: #d97757; color: #e0e0e0; }
-.badge.provider-mock { background: #ff9800; color: #1a1a1a; }
+.badge.provider-deepseek { background: #c8e6c9; color: #2e7d32; }
+.badge.provider-openai { background: #b2dfdb; color: #00695c; }
+.badge.provider-anthropic { background: #ffe0b2; color: #e65100; }
+.badge.provider-mock { background: #fff9c4; color: #f57f17; }
 
 section {
     margin-bottom: 30px;
@@ -82,24 +81,24 @@ input[type="text"],
 textarea {
     flex: 1;
     padding: 12px;
-    border: 1px solid #3a3a3a;
+    border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1em;
     font-family: inherit;
     transition: border-color 0.3s;
-    background: #222;
-    color: #e0e0e0;
+    background: #fafafa;
+    color: #333;
 }
 
 input[type="text"]::placeholder,
 textarea::placeholder {
-    color: #666;
+    color: #999;
 }
 
 input[type="text"]:focus,
 textarea:focus {
     outline: none;
-    border-color: #e74c3c;
+    border-color: #667eea;
 }
 
 textarea {
@@ -119,24 +118,24 @@ textarea {
 }
 
 .btn-primary {
-    background: #c0392b;
+    background: #667eea;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background: #e74c3c;
+    background: #764ba2;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-    background: #333;
-    color: #ccc;
-    border: 1px solid #444;
+    background: #f5f5f5;
+    color: #555;
+    border: 1px solid #ddd;
 }
 
 .btn-secondary:hover {
-    background: #444;
+    background: #e8e8e8;
 }
 
 .status-message {
@@ -147,27 +146,27 @@ textarea {
 }
 
 .status-message.success {
-    background: #1b3a1b;
-    color: #6fcf6f;
-    border: 1px solid #2e7d32;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
 }
 
 .status-message.error {
-    background: #3a1b1b;
-    color: #f08080;
-    border: 1px solid #8b2020;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #e57373;
 }
 
 .status-message.info {
-    background: #1b2a3a;
-    color: #80c0f0;
-    border: 1px solid #2060a0;
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #64b5f6;
 }
 
 .loading {
     text-align: center;
     padding: 20px;
-    color: #e74c3c;
+    color: #667eea;
     font-weight: 500;
 }
 
@@ -181,21 +180,21 @@ textarea {
 
 /* Answer box with markdown */
 .answer-box {
-    background: #111;
-    border-left: 4px solid #c0392b;
+    background: #f9f9fb;
+    border-left: 4px solid #667eea;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
 
 .answer-box h3 {
-    color: #e74c3c;
+    color: #667eea;
     margin-bottom: 12px;
     font-size: 1.1em;
 }
 
 .answer-text {
-    color: #d0d0d0;
+    color: #333;
     line-height: 1.7;
 }
 
@@ -203,7 +202,7 @@ textarea {
 .answer-text h2,
 .answer-text h3,
 .answer-text h4 {
-    color: #e0e0e0;
+    color: #555;
     margin-top: 16px;
     margin-bottom: 8px;
 }
@@ -213,35 +212,35 @@ textarea {
 }
 
 .answer-text strong {
-    color: #f0f0f0;
+    color: #222;
 }
 
 .answer-text em {
-    color: #ccc;
+    color: #555;
 }
 
 .answer-text code {
-    background: #2a2a2a;
+    background: #f0f0f0;
     padding: 2px 6px;
     border-radius: 4px;
     font-family: 'Courier New', monospace;
     font-size: 0.9em;
-    color: #e74c3c;
+    color: #667eea;
 }
 
 .answer-text pre {
-    background: #0d0d0d;
+    background: #f5f5f5;
     padding: 14px;
     border-radius: 6px;
     overflow-x: auto;
     margin: 12px 0;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #e0e0e0;
 }
 
 .answer-text pre code {
     background: none;
     padding: 0;
-    color: #d0d0d0;
+    color: #333;
 }
 
 .answer-text ul,
@@ -255,10 +254,10 @@ textarea {
 }
 
 .answer-text blockquote {
-    border-left: 3px solid #c0392b;
+    border-left: 3px solid #667eea;
     padding-left: 14px;
     margin: 10px 0;
-    color: #999;
+    color: #666;
 }
 
 /* Sources */
@@ -267,14 +266,14 @@ textarea {
 }
 
 .sources h3 {
-    color: #ccc;
+    color: #555;
     font-size: 1em;
     margin-bottom: 10px;
 }
 
 .source-item {
-    background: #111;
-    border: 1px solid #2a2a2a;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
     border-radius: 6px;
     padding: 15px;
     margin-bottom: 10px;
@@ -289,30 +288,28 @@ textarea {
 
 .source-file {
     font-weight: 600;
-    color: #e74c3c;
+    color: #667eea;
     font-family: 'Courier New', monospace;
     font-size: 0.9em;
 }
 
 .source-score {
-    background: #2a2a2a;
+    background: #e8eaf6;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.85em;
-    color: #999;
+    color: #5c6bc0;
 }
 
 .source-content {
-    background: #0d0d0d;
+    background: #f5f5f5;
     padding: 12px;
     border-radius: 4px;
     font-family: 'Courier New', monospace;
     font-size: 0.85em;
     white-space: pre-wrap;
     overflow-x: auto;
-    color: #b0b0b0;
+    color: #444;
     line-height: 1.4;
-    border: 1px solid #222;
-}
-    line-height: 1.4;
+    border: 1px solid #e0e0e0;
 }
