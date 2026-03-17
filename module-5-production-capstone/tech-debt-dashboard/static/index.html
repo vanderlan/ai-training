@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Debt Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="logo">&#128202; Tech Debt Dashboard</h1>
+      <span class="subtitle">Powered by static analysis + LLM</span>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Input form -->
+    <section class="card input-card">
+      <h2>Analyze a GitHub Repository</h2>
+      <p class="hint">Enter a public GitHub repo URL to scan it for technical debt.</p>
+      <form id="analyze-form" autocomplete="off">
+        <div class="input-row">
+          <input
+            id="repo-url"
+            type="url"
+            placeholder="https://github.com/owner/repo"
+            required
+            pattern="https://github\.com/.+"
+          />
+          <button type="submit" id="submit-btn">Analyze</button>
+        </div>
+        <div id="error-msg" class="error-msg hidden"></div>
+      </form>
+    </section>
+
+    <!-- Loading state -->
+    <section id="loading" class="card loading-card hidden">
+      <div class="spinner"></div>
+      <p id="loading-text">Cloning repository&hellip;</p>
+    </section>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+
+      <!-- Summary cards -->
+      <section class="summary-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="s-total">—</div>
+          <div class="stat-label">Files Analyzed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="s-avg">—</div>
+          <div class="stat-label">Avg Debt Score</div>
+        </div>
+        <div class="stat-card stat-high">
+          <div class="stat-value" id="s-high">—</div>
+          <div class="stat-label">&#128308; High Debt</div>
+        </div>
+        <div class="stat-card stat-medium">
+          <div class="stat-value" id="s-medium">—</div>
+          <div class="stat-label">&#128993; Medium Debt</div>
+        </div>
+        <div class="stat-card stat-low">
+          <div class="stat-value" id="s-low">—</div>
+          <div class="stat-label">&#128994; Low Debt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="s-cached" style="font-size:1rem">—</div>
+          <div class="stat-label">Cache</div>
+        </div>
+      </section>
+
+      <!-- Top issue types -->
+      <section class="card" id="top-issues-card">
+        <h3>Top Issue Types</h3>
+        <div id="top-issues-tags" class="tag-row"></div>
+      </section>
+
+      <!-- Chart -->
+      <section class="card chart-card">
+        <h3>Debt Score by File <span class="chart-legend"><span class="dot high"></span>High &nbsp;<span class="dot medium"></span>Medium &nbsp;<span class="dot low"></span>Low</span></h3>
+        <div class="chart-container">
+          <canvas id="debt-chart"></canvas>
+        </div>
+      </section>
+
+      <!-- File table -->
+      <section class="card table-card">
+        <div class="table-header-row">
+          <h3>File Details</h3>
+          <div class="filter-row">
+            <label>Filter:
+              <select id="severity-filter">
+                <option value="all">All</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+            <input id="search-input" type="search" placeholder="Search file path…" />
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table id="files-table">
+            <thead>
+              <tr>
+                <th class="sortable" data-col="path">File Path &#8597;</th>
+                <th class="sortable" data-col="debt_score">Score &#8597;</th>
+                <th>Severity</th>
+                <th>Issues</th>
+              </tr>
+            </thead>
+            <tbody id="files-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SonarCloud-style code viewer -->
+      <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="code-modal">
+          <div class="code-modal-header">
+            <span class="code-modal-path" id="modal-path"></span>
+            <div class="code-modal-meta">
+              <span class="badge" id="modal-score-badge"></span>
+              <span class="badge" id="modal-severity-badge"></span>
+              <span class="code-modal-count" id="modal-issue-count"></span>
+            </div>
+            <button class="modal-close" id="modal-close">&times;</button>
+          </div>
+          <div class="code-modal-body">
+            <div id="code-viewer" class="code-viewer"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /results -->
+  </main>
+
+  <footer class="footer">
+    Module 5 Capstone &mdash; Tech Debt Dashboard &mdash;
+    <a href="/docs" target="_blank">API Docs</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

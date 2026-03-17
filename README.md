@@ -85,10 +85,10 @@ This repository contains hands-on projects and exercises for Taller's internal A
 | Module | Project | Status |
 |--------|---------|--------|
 | Module 1 | URL Shortener | ✅ Done |
-| Module 2 | Code Analyzer Agent | ⏳ Not Started |
-| Module 3 | Migration Workflow System | ⏳ Not Started |
-| Module 4 | RAG System with Evaluation | ⏳ Not Started |
-| Module 5 | Capstone Project | ⏳ Not Started |
+| Module 2 | Code Analyzer Agent | ✅ Done |
+| Module 3 | Migration Workflow System | ✅ Done |
+| Module 4 | RAG System with Evaluation | ✅ Done |
+| Module 5 | Capstone Project | ✅ Done |
 
 ---
 
