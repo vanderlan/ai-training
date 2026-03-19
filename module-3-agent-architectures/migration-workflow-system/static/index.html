@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Workflow System - Module 3</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 Migration Workflow System - Module 3</h1>
+            <p>AI-powered multi-phase code migration using Observe → Think → Act agent loop</p>
+            <div class="status-bar">
+                <span id="model-badge" class="badge">Loading...</span>
+                <span id="status-badge" class="badge">Ready</span>
+            </div>
+        </header>
+
+        <section>
+            <h2>Migration Settings</h2>
+            <div class="input-row">
+                <div>
+                    <label for="source-framework">Source Framework</label>
+                    <input type="text" id="source-framework" placeholder="e.g. express, flask, vue">
+                </div>
+                <div>
+                    <label for="target-framework">Target Framework</label>
+                    <input type="text" id="target-framework" placeholder="e.g. fastapi, nest, react">
+                </div>
+            </div>
+        </section>
+
+        <section class="files-section">
+            <h2>Source Files</h2>
+            <div id="files-container"></div>
+            <div class="actions-row">
+                <button class="btn-secondary" onclick="addFile()">+ Add File</button>
+                <button class="btn-secondary" onclick="loadExample()">Load Example</button>
+            </div>
+            <p class="help-text">Add source files to migrate. Each file needs a filename and its content.</p>
+        </section>
+
+        <div class="actions-row" style="margin-bottom:20px;">
+            <button class="btn-primary" onclick="runMigration()">🚀 Run Migration</button>
+            <button class="btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+
+        <div id="loading" class="loading hidden">Running migration workflow (this may take a minute)...</div>
+        <div id="status-msg" class="hidden"></div>
+        <div id="result-container" class="result-container"></div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

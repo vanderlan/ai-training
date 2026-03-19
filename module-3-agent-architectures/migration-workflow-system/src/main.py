@@ -11,6 +11,8 @@ from typing import Any
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from src.agent import MigrationAgent
 from src.llm_client import LLMClient
@@ -19,6 +21,9 @@ from src.state import MigrationState, Phase
 
 # Load environment variables
 load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 # Global state
 llm_client: LLMClient = None
@@ -60,6 +65,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files for UI
+if os.path.isdir(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/")
+async def root():
+    """Serve the UI."""
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 
 # Health check endpoint
