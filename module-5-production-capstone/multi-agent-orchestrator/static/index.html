@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Agent Orchestrator</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="logo">&#129302; Multi-Agent Orchestrator</h1>
+      <span class="subtitle">Supervisor pattern with DeepSeek</span>
+      <div class="header-toggle">
+        <label class="toggle-label" for="live-toggle">
+          <span class="toggle-text">Live View</span>
+          <input type="checkbox" id="live-toggle" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Main content -->
+    <main class="main" id="main-content">
+
+      <!-- Input form -->
+      <section class="card input-card">
+        <h2>Research Task</h2>
+        <p class="hint">Describe a research or writing task. The supervisor will coordinate Researcher, Writer, and Reviewer agents to produce a polished result.</p>
+        <form id="task-form" autocomplete="off">
+          <div class="form-group">
+            <label for="task-input">Task description</label>
+            <textarea id="task-input" placeholder="e.g. Write a brief explanation of how RAG systems work for a technical blog post" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="iterations-select">Max iterations</label>
+              <select id="iterations-select">
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="7">7</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:0 0 auto;">
+              <label>&nbsp;</label>
+              <button type="submit" id="submit-btn" class="btn-primary">Run Agents</button>
+            </div>
+          </div>
+          <div id="error-msg" class="error-msg hidden"></div>
+        </form>
+      </section>
+
+      <!-- Loading state -->
+      <section id="loading" class="card loading-card hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Running multi-agent workflow&hellip;</p>
+      </section>
+
+      <!-- Results -->
+      <div id="results" class="hidden">
+
+        <!-- Note banner -->
+        <div id="note-banner" class="note-banner hidden"></div>
+
+        <!-- Summary cards -->
+        <section class="summary-grid">
+          <div class="stat-card stat-accent">
+            <div class="stat-value" id="s-steps">—</div>
+            <div class="stat-label">Steps Taken</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="s-agents">—</div>
+            <div class="stat-label">Agents Used</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="s-cached" style="font-size:1rem">—</div>
+            <div class="stat-label">Cache</div>
+          </div>
+        </section>
+
+        <!-- Steps timeline -->
+        <section class="card steps-card">
+          <h3>Execution Timeline</h3>
+          <div id="timeline" class="timeline"></div>
+        </section>
+
+        <!-- Final result -->
+        <section class="card result-card">
+          <h3>&#10024; Final Result</h3>
+          <div id="result-content" class="result-content"></div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Live visualization panel (right side) -->
+    <aside class="live-panel hidden" id="live-panel">
+      <div class="live-panel-header">
+        <span class="live-dot"></span>
+        <span>Agent Workflow</span>
+      </div>
+
+      <!-- Agent graph -->
+      <div class="agent-graph">
+        <div class="agent-node supervisor" id="node-supervisor">
+          <div class="node-icon">&#129302;</div>
+          <div class="node-label">Supervisor</div>
+          <div class="node-status" id="status-supervisor"></div>
+        </div>
+        <div class="agent-connectors">
+          <div class="connector" id="conn-researcher"><div class="connector-line"></div></div>
+          <div class="connector" id="conn-writer"><div class="connector-line"></div></div>
+          <div class="connector" id="conn-reviewer"><div class="connector-line"></div></div>
+        </div>
+        <div class="agent-workers">
+          <div class="agent-node researcher" id="node-researcher">
+            <div class="node-icon">&#128269;</div>
+            <div class="node-label">Researcher</div>
+            <div class="node-status" id="status-researcher"></div>
+          </div>
+          <div class="agent-node writer" id="node-writer">
+            <div class="node-icon">&#9997;&#65039;</div>
+            <div class="node-label">Writer</div>
+            <div class="node-status" id="status-writer"></div>
+          </div>
+          <div class="agent-node reviewer" id="node-reviewer">
+            <div class="node-icon">&#128203;</div>
+            <div class="node-label">Reviewer</div>
+            <div class="node-status" id="status-reviewer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live message feed -->
+      <div class="live-feed-header">Message Feed</div>
+      <div class="live-feed" id="live-feed"></div>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    Lab 05 — Multi-Agent Orchestration &bull; AI Training Module 5
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
